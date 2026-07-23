@@ -8,23 +8,20 @@ jobs:
       - uses: actions/setup-node@v7
       - run: npm clean-install
       - run: npm run test
-
-    build-push:
+  build-push:
     needs: test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
-      - uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - uses: docker/build-push-action@v7
-        with:
-          context: .
-          push: true
-          tags: ghcr.io/${{ github.repository }}:latest
-    
-
+    - uses: actions/checkout@v7
+    - uses: docker/login-action@v4
+      with:
+        registry: ghcr.io
+        username: ${{ github.repository_owner }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    - uses: docker/build-push-action@v7
+      with:
+        context: .
+        push: true
+        tags: ghcr.io/${{ github.repository }}:latest
 permissions:
-packages: write
+  packages: write
